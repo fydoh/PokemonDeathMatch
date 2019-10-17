@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Checkmark from '@carvana/icons/Checkmark';
+import History from './History';
 
 export const PokemonCard = styled.div`
   background: ${props => props.theme.carvana.white.primary};
@@ -24,4 +25,12 @@ export const Check = styled(Checkmark)`
   bottom: 5px;
   right: 10px;
   color: ${p => p.theme.carvana.blue.primary};
+`;
+
+export const HistoryIcon = styled(History)`
+  color: ${p => p.theme.carvana.yellow.hover};
+`;
+
+export const Name = styled.p`
+  margin-bottom: 0;
 `;

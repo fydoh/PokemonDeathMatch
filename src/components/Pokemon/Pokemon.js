@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPokemon } from '../../services';
+import Experiment, {
+  When,
+  UpdateFetchExperiment,
+  Debugger
+} from '@carvana/experiment';
+import { fetchPokemon, fetchExperiment } from '../../services';
 import {
   MainWrapper,
   Title,
@@ -10,6 +15,8 @@ import {
 import Loader from './Loader';
 import Ring from './Ring';
 import Card from './Card';
+
+UpdateFetchExperiment(fetchExperiment);
 
 const Pokemon = () => {
   const [pokemon, setPokemon] = useState([]);
@@ -57,17 +64,42 @@ const Pokemon = () => {
     <MainWrapper>
       <Title>Pokemon Death Match</Title>
       <Ring contenders={contenders} clear={clearContenders} />
-      <ContentWrapper>
-        {pokemon.map(guy => (
-          <Card
-            guy={guy}
-            update={updateContenders}
-            key={guy.name}
-            contenders={contenders}
-          />
-        ))}
-        {loading && <Loader data-testid="loader" />}
-      </ContentWrapper>
+      <Debugger />
+      <Experiment
+        name="battle-history"
+        environment="development"
+        identifier="meeee"
+        defaultBucket="control"
+      >
+        <When bucket="control">
+          <ContentWrapper>
+            {pokemon.map(guy => (
+              <Card
+                guy={guy}
+                update={updateContenders}
+                key={guy.name}
+                contenders={contenders}
+              />
+            ))}
+            {loading && <Loader data-testid="loader" />}
+          </ContentWrapper>
+        </When>
+        <When bucket="history">
+          <ContentWrapper>
+            {pokemon.map(guy => (
+              <Card
+                guy={guy}
+                update={updateContenders}
+                key={guy.name}
+                contenders={contenders}
+                showBattleHistory
+              />
+            ))}
+            {loading && <Loader data-testid="loader" />}
+          </ContentWrapper>
+        </When>
+      </Experiment>
+
       <ButtonWrapper>
         <Button
           data-testid="prev-button"

@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+export const fetchExperiment = () => (
+  new Promise(resolve => {
+    return resolve({
+      assignedBucket: 'control',
+      experimentName: 'battle-history'
+    });
+  })
+);
+
+
 export const fetchPokemonData = name => {
   return axios({
     method: 'GET',
