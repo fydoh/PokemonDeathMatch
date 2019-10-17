@@ -9,7 +9,6 @@ export const fetchExperiment = () => (
   })
 );
 
-
 export const fetchPokemonData = name => {
   return axios({
     method: 'GET',

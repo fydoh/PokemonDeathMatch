@@ -10,9 +10,15 @@ const History = styled.div`
   left: 10px;
 `;
 
-const Card = ({ update, guy, contenders, showBattleHistory }) => {
+const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
   const { name, sprites } = guy;
   const isPokemonSelected = contenders.find(x => x.name === name);
+
+  console.log({
+    fightResults,
+    name,
+    res: fightResults.filter(x => x.winner === name || x.loser === name).length === 0
+  });
 
   return (
     <PokemonCard onClick={() => update(guy)} data-testid="card">
@@ -26,7 +32,14 @@ const Card = ({ update, guy, contenders, showBattleHistory }) => {
               <HistoryIcon height={20} width={20} />
             </Tooltip.HoverElement>
             <Tooltip.Content arrowPosition="left">
-              Here to stay.
+              {fightResults &&
+                fightResults.filter(x => x.winner === name || x.loser === name).length === 0 &&
+                <div>No fight results</div>
+              }
+              {fightResults &&
+                fightResults.filter(x => x.winner === name || x.loser === name).length > 0 &&
+                <div>Has fought</div>
+              }
             </Tooltip.Content>
           </Tooltip>
         </History>
@@ -38,6 +51,7 @@ const Card = ({ update, guy, contenders, showBattleHistory }) => {
 Card.defaultProps = {
   contenders: [],
   update: f => f,
+  fightResults: [],
   showBattleHistory: false
 };
 
@@ -45,6 +59,7 @@ Card.propTypes = {
   update: PropTypes.func,
   guy: PropTypes.shape({}).isRequired,
   contenders: PropTypes.arrayOf(PropTypes.shape({})),
+  fightResults: PropTypes.arrayOf(PropTypes.shape({})),
   showBattleHistory: PropTypes.bool
 };
 

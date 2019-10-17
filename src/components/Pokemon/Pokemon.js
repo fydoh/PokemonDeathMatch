@@ -23,6 +23,7 @@ const Pokemon = () => {
   const [nav, setNav] = useState({ next: '', prev: '' });
   const [loading, setLoading] = useState(true);
   const [contenders, setContenders] = useState([]);
+  const [fightResults, setFightResults] = useState([]);
 
   const fetchData = async url => {
     const { results, next, prev } = await fetchPokemon(url);
@@ -63,7 +64,20 @@ const Pokemon = () => {
   return (
     <MainWrapper>
       <Title>Pokemon Death Match</Title>
-      <Ring contenders={contenders} clear={clearContenders} />
+      <Experiment
+        name="battle-history"
+        environment="development"
+        identifier="meeee"
+        defaultBucket="control"
+      >
+        <When bucket="control">
+          <Ring contenders={contenders} clear={clearContenders} />
+        </When>
+        <When bucket="history">
+          <Ring contenders={contenders} clear={clearContenders} setFightResults={setFightResults} />
+        </When>
+      </Experiment>
+
       <Debugger />
       <Experiment
         name="battle-history"
@@ -92,6 +106,7 @@ const Pokemon = () => {
                 update={updateContenders}
                 key={guy.name}
                 contenders={contenders}
+                fightResults={fightResults}
                 showBattleHistory
               />
             ))}
