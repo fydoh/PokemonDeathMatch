@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '@carvana/tooltip';
-import { PokemonCard, Check, HistoryIcon, Name } from './Card.styles';
+import Experiment, { When } from '@carvana/experiment';
+import { PokemonCard, Check, HistoryIcon, Name, WinsLossesWrapper, WinsLossesLine, Win, Loss } from './Card.styles';
+import WinLossCard from './WinLossCard';
 
 const History = styled.div`
   position: absolute;
@@ -14,11 +16,11 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
   const { name, sprites } = guy;
   const isPokemonSelected = contenders.find(x => x.name === name);
 
-  console.log({
-    fightResults,
-    name,
-    res: fightResults.filter(x => x.winner === name || x.loser === name).length === 0
-  });
+  // console.log({
+  //   fightResults,
+  //   name,
+  //   res: fightResults.filter(x => x.winner === name || x.loser === name).length === 0
+  // });
 
   return (
     <PokemonCard onClick={() => update(guy)} data-testid="card">
@@ -38,7 +40,32 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
               }
               {fightResults &&
                 fightResults.filter(x => x.winner === name || x.loser === name).length > 0 &&
-                <div>Has fought</div>
+                <Experiment
+                  name="win-loss-list"
+                  environment="development"
+                  identifier="meeee"
+                  defaultBucket="control"
+                >
+                  <When bucket="control">
+                    <div>Has fought</div>
+                  </When>
+                  <When bucket="showem">
+                    <WinsLossesWrapper>
+                      {fightResults.filter(x => x.winner === name || x.loser === name).map(y => {
+                        const isWinner = y.winner === name;
+                        return (
+                          <WinsLossesLine key={`W_L_${name}`}>
+                            <Win><WinLossCard guy={{ name, isWinner }} /></Win>
+                            <Loss>
+                              <WinLossCard guy={{ name: (isWinner) ? y.loser : y.winner, isWinner: !isWinner }} />
+                            </Loss>
+                          </WinsLossesLine>
+                        );
+                      }
+                      )}
+                    </WinsLossesWrapper>
+                  </When>
+                </Experiment>
               }
             </Tooltip.Content>
           </Tooltip>

@@ -34,3 +34,20 @@ export const HistoryIcon = styled(History)`
 export const Name = styled.p`
   margin-bottom: 0;
 `;
+
+export const WinsLossesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+`;
+
+export const WinsLossesLine = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const Win = styled.div`
+`;
+
+export const Loss = styled.div`
+`;
