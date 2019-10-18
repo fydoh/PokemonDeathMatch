@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '@carvana/tooltip';
+import uuid from 'uuid/v4';
 import Experiment, { When } from '@carvana/experiment';
 import { PokemonCard, Check, HistoryIcon, Name, WinsLossesWrapper, WinsLossesLine, Win, Loss } from './Card.styles';
 import WinLossCard from './WinLossCard';
@@ -29,7 +30,7 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
       {isPokemonSelected && <Check data-testid="checkmark" />}
       {showBattleHistory && (
         <History>
-          <Tooltip>
+          <Tooltip persist>
             <Tooltip.HoverElement>
               <HistoryIcon height={20} width={20} />
             </Tooltip.HoverElement>
@@ -54,7 +55,7 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
                       {fightResults.filter(x => x.winner === name || x.loser === name).map(y => {
                         const isWinner = y.winner === name;
                         return (
-                          <WinsLossesLine key={`W_L_${name}`}>
+                          <WinsLossesLine key={`W_L_${uuid()}`}>
                             <Win><WinLossCard guy={{ name, isWinner }} /></Win>
                             <Loss>
                               <WinLossCard guy={{ name: (isWinner) ? y.loser : y.winner, isWinner: !isWinner }} />
