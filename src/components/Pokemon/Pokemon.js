@@ -3,13 +3,11 @@ import { fetchPokemon } from '../../services';
 import {
   MainWrapper,
   Title,
-  ContentWrapper,
-  Button,
-  ButtonWrapper
-} from './Pokemon.styles';
+  ContentWrapper } from './Pokemon.styles';
 import Loader from './Loader';
 import Ring from './Ring';
 import Card from './Card';
+import { Navigation } from './Navigation';
 
 const Pokemon = () => {
   const [pokemon, setPokemon] = useState([]);
@@ -68,22 +66,7 @@ const Pokemon = () => {
         ))}
         {loading && <Loader data-testid="loader" />}
       </ContentWrapper>
-      <ButtonWrapper>
-        <Button
-          data-testid="prev-button"
-          onClick={() => navigateCards('prev')}
-          disabled={!nav.prev}
-        >
-          Prev
-        </Button>
-        <Button
-          data-testid="next-button"
-          onClick={() => navigateCards('next')}
-          disabled={!nav.next}
-        >
-          Next
-        </Button>
-      </ButtonWrapper>
+      <Navigation nav={nav} navigateCards={navigateCards} />
     </MainWrapper>
   );
 };
