@@ -47,7 +47,14 @@ export const WinsLossesLine = styled.div`
 `;
 
 export const Win = styled.div`
+  color: ${p => p.theme.carvana.green.primary};
+  font-weight: 700px;
 `;
 
 export const Loss = styled.div`
+  color: ${p => p.theme.carvana.red.primary};
+`;
+
+export const Outcome = styled.span`
+  margin-right: 3px;
 `;

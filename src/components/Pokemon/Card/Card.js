@@ -2,15 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '@carvana/tooltip';
-import uuid from 'uuid/v4';
-import Experiment, { When } from '@carvana/experiment';
-import { PokemonCard, Check, HistoryIcon, Name, WinsLossesWrapper, WinsLossesLine, Win, Loss } from './Card.styles';
-import WinLossCard from './WinLossCard';
+import FightResults from './FightResults';
+import { PokemonCard, Check, HistoryIcon, Name } from './Card.styles';
 
 const History = styled.div`
   position: absolute;
   bottom: 5px;
   left: 10px;
+`;
+
+const CustomContent = styled(Tooltip.Content)`
+  && {
+    background: #e4ecf0;
+    color: black;
+    border: 2px solid gray;
+    &:after {
+      border-bottom-color: gray;
+      border-top-color: gray;
+    }
+  }
 `;
 
 const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
@@ -20,7 +30,9 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
   // console.log({
   //   fightResults,
   //   name,
-  //   res: fightResults.filter(x => x.winner === name || x.loser === name).length === 0
+  //   res:
+  //     fightResults.filter(x => x.winner === name || x.loser === name).length ===
+  //     0
   // });
 
   return (
@@ -34,41 +46,15 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
             <Tooltip.HoverElement>
               <HistoryIcon height={20} width={20} />
             </Tooltip.HoverElement>
-            <Tooltip.Content arrowPosition="left">
+            <CustomContent arrowPosition="left">
               {fightResults &&
-                fightResults.filter(x => x.winner === name || x.loser === name).length === 0 &&
-                <div>No fight results</div>
-              }
+                fightResults.filter(x => x.winner === name || x.loser === name)
+                  .length === 0 && <div>No fight results</div>}
               {fightResults &&
-                fightResults.filter(x => x.winner === name || x.loser === name).length > 0 &&
-                <Experiment
-                  name="win-loss-list"
-                  environment="development"
-                  identifier="meeee"
-                  defaultBucket="control"
-                >
-                  <When bucket="control">
-                    <div>Has fought</div>
-                  </When>
-                  <When bucket="showem">
-                    <WinsLossesWrapper>
-                      {fightResults.filter(x => x.winner === name || x.loser === name).map(y => {
-                        const isWinner = y.winner === name;
-                        return (
-                          <WinsLossesLine key={`W_L_${uuid()}`}>
-                            <Win><WinLossCard guy={{ name, isWinner }} /></Win>
-                            <Loss>
-                              <WinLossCard guy={{ name: (isWinner) ? y.loser : y.winner, isWinner: !isWinner }} />
-                            </Loss>
-                          </WinsLossesLine>
-                        );
-                      }
-                      )}
-                    </WinsLossesWrapper>
-                  </When>
-                </Experiment>
-              }
-            </Tooltip.Content>
+                fightResults.filter(x => x.winner === name || x.loser === name).length > 0 && (
+                <FightResults name={name} fightResults={fightResults} />
+              )}
+            </CustomContent>
           </Tooltip>
         </History>
       )}

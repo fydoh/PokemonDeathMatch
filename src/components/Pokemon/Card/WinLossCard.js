@@ -3,19 +3,13 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { PokemonCard, Name } from './Card.styles';
 
-const StyledPokemonCard = styled(PokemonCard)`
-  min-height: 30px;
-  min-width: 20px;
-  font-size: 0.8em;
-  color: ${p => (p.isWinner
-    ? p.theme.carvana.green.primary
-    : p.theme.carvana.red.primary)};
-
+const StyledPokemonCard = styled.div`
+  margin-left: 4px;
 `;
 
 const WinLossCard = ({ guy }) => {
   const { name, isWinner } = guy;
-  console.log({ guy });
+  // console.log({ guy });
 
   return (
     <StyledPokemonCard isWinner={isWinner}>
