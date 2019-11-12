@@ -64,19 +64,11 @@ const Pokemon = () => {
   return (
     <MainWrapper>
       <Title>Pokemon Death Match</Title>
-      <Experiment
-        name="battle-history"
-        environment="development"
-        identifier="meeee"
-        defaultBucket="control"
-      >
-        <When bucket="control">
-          <Ring contenders={contenders} clear={clearContenders} />
-        </When>
-        <When bucket="history">
-          <Ring contenders={contenders} clear={clearContenders} setFightResults={setFightResults} />
-        </When>
-      </Experiment>
+      <Ring
+        contenders={contenders}
+        setFightResults={setFightResults}
+        clearContenders={clearContenders}
+      />
 
       <Debugger />
       <Experiment
