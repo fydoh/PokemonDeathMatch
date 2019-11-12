@@ -15,6 +15,7 @@ import {
 import Loader from './Loader';
 import Ring from './Ring';
 import Card from './Card';
+import FightResultsProvider from './FightResultsProvider';
 
 UpdateFetchExperiment(fetchExperiment);
 
@@ -23,7 +24,6 @@ const Pokemon = () => {
   const [nav, setNav] = useState({ next: '', prev: '' });
   const [loading, setLoading] = useState(true);
   const [contenders, setContenders] = useState([]);
-  const [fightResults, setFightResults] = useState([]);
 
   const fetchData = async url => {
     const { results, next, prev } = await fetchPokemon(url);
@@ -62,68 +62,68 @@ const Pokemon = () => {
   };
 
   return (
-    <MainWrapper>
-      <Title>Pokemon Death Match</Title>
-      <Ring
-        contenders={contenders}
-        setFightResults={setFightResults}
-        clearContenders={clearContenders}
-      />
+    <FightResultsProvider>
+      <MainWrapper>
+        <Title>Pokemon Death Match</Title>
+        <Ring
+          contenders={contenders}
+          clearContenders={clearContenders}
+        />
 
-      <Debugger />
-      <Experiment
-        name="battle-history"
-        environment="development"
-        identifier="meeee"
-        defaultBucket="control"
-      >
-        <When bucket="control">
-          <ContentWrapper>
-            {pokemon.map(guy => (
-              <Card
-                guy={guy}
-                update={updateContenders}
-                key={guy.name}
-                contenders={contenders}
-              />
-            ))}
-            {loading && <Loader data-testid="loader" />}
-          </ContentWrapper>
-        </When>
-        <When bucket="history">
-          <ContentWrapper>
-            {pokemon.map(guy => (
-              <Card
-                guy={guy}
-                update={updateContenders}
-                key={guy.name}
-                contenders={contenders}
-                fightResults={fightResults}
-                showBattleHistory
-              />
-            ))}
-            {loading && <Loader data-testid="loader" />}
-          </ContentWrapper>
-        </When>
-      </Experiment>
+        <Debugger />
+        <Experiment
+          name="battle-history"
+          environment="development"
+          identifier="meeee"
+          defaultBucket="control"
+        >
+          <When bucket="control">
+            <ContentWrapper>
+              {pokemon.map(guy => (
+                <Card
+                  guy={guy}
+                  update={updateContenders}
+                  key={guy.name}
+                  contenders={contenders}
+                />
+              ))}
+              {loading && <Loader data-testid="loader" />}
+            </ContentWrapper>
+          </When>
+          <When bucket="history">
+            <ContentWrapper>
+              {pokemon.map(guy => (
+                <Card
+                  guy={guy}
+                  update={updateContenders}
+                  key={guy.name}
+                  contenders={contenders}
+                  showBattleHistory
+                />
+              ))}
+              {loading && <Loader data-testid="loader" />}
+            </ContentWrapper>
+          </When>
+        </Experiment>
 
-      <ButtonWrapper>
-        <Button
-          data-testid="prev-button"
-          onClick={() => navigateCards('prev')}
-          disabled={!nav.prev}
-        >
-          Prev
-        </Button>
-        <Button
-          data-testid="next-button"
-          onClick={() => navigateCards('next')}
-          disabled={!nav.next}
-        >
-          Next
-        </Button>
-      </ButtonWrapper>
-    </MainWrapper>
+        <ButtonWrapper>
+          <Button
+            data-testid="prev-button"
+            onClick={() => navigateCards('prev')}
+            disabled={!nav.prev}
+          >
+            Prev
+          </Button>
+          <Button
+            data-testid="next-button"
+            onClick={() => navigateCards('next')}
+            disabled={!nav.next}
+          >
+            Next
+          </Button>
+        </ButtonWrapper>
+      </MainWrapper>
+    </FightResultsProvider>
   );
 };
 

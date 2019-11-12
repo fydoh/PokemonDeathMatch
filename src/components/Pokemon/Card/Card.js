@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tooltip from '@carvana/tooltip';
 import FightResults from './FightResults';
 import { PokemonCard, Check, HistoryIcon, Name } from './Card.styles';
+import FightResultsContext from '../FightResultsContext';
 
 const History = styled.div`
   position: absolute;
@@ -23,7 +24,8 @@ const CustomContent = styled(Tooltip.Content)`
   }
 `;
 
-const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
+const Card = ({ update, guy, contenders, showBattleHistory }) => {
+  const { fightResults } = useContext(FightResultsContext);
   const { name, sprites } = guy;
   const isPokemonSelected = contenders.find(x => x.name === name);
 
@@ -65,7 +67,6 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
 Card.defaultProps = {
   contenders: [],
   update: f => f,
-  fightResults: [],
   showBattleHistory: false
 };
 
@@ -73,7 +74,6 @@ Card.propTypes = {
   update: PropTypes.func,
   guy: PropTypes.shape({}).isRequired,
   contenders: PropTypes.arrayOf(PropTypes.shape({})),
-  fightResults: PropTypes.arrayOf(PropTypes.shape({})),
   showBattleHistory: PropTypes.bool
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Fighter from '../Fighter';
 import {
@@ -9,6 +9,7 @@ import {
   WinnerName
 } from './Ring.styles';
 import FightLogic from './FightLogic';
+import FightResultsContext from '../FightResultsContext';
 
 const initialState = {
   fightResults: []
@@ -18,10 +19,11 @@ const initialState = {
   { winner: 'charmander', loser: 'pikachu', otherFighters: [] }
 */
 
-const Fight = ({ contenders, clear, setFightResults }) => {
+const Fight = ({ contenders, clear }) => {
   const shouldShowClearButton = contenders.length > 0;
   const shouldShowFightButton = contenders.length >= 2;
   const [winner, useWinner] = useState('');
+  const { setFightResults } = useContext(FightResultsContext);
   const [state, dispatch] = useReducer((currentState, action) => {
     // console.log({ currentState, action, contenders: action.payload.contenders });
     const fightResults = [...currentState.fightResults, ...action.payload.contenders.reduce((acc, x) => {
@@ -92,13 +94,11 @@ const Fight = ({ contenders, clear, setFightResults }) => {
 
 Fight.defaultProps = {
   clear: f => f,
-  setFightResults: () => {}
 };
 
 Fight.propTypes = {
   contenders: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   clear: PropTypes.func.isRequired,
-  setFightResults: PropTypes.func
 };
 
 export default Fight;
