@@ -79,41 +79,19 @@ const Pokemon = () => {
       </Experiment>
 
       <Debugger />
-      <Experiment
-        name="battle-history"
-        environment="development"
-        identifier="meeee"
-        defaultBucket="control"
-      >
-        <When bucket="control">
-          <ContentWrapper>
-            {pokemon.map(guy => (
-              <Card
-                guy={guy}
-                update={updateContenders}
-                key={guy.name}
-                contenders={contenders}
-              />
-            ))}
-            {loading && <Loader data-testid="loader" />}
-          </ContentWrapper>
-        </When>
-        <When bucket="history">
-          <ContentWrapper>
-            {pokemon.map(guy => (
-              <Card
-                guy={guy}
-                update={updateContenders}
-                key={guy.name}
-                contenders={contenders}
-                fightResults={fightResults}
-                showBattleHistory
-              />
-            ))}
-            {loading && <Loader data-testid="loader" />}
-          </ContentWrapper>
-        </When>
-      </Experiment>
+      <ContentWrapper>
+        {pokemon.map(guy => (
+          <Card
+            guy={guy}
+            update={updateContenders}
+            key={guy.name}
+            contenders={contenders}
+            fightResults={fightResults}
+            showBattleHistory
+          />
+        ))}
+        {loading && <Loader data-testid="loader" />}
+      </ContentWrapper>
 
       <ButtonWrapper>
         <Button

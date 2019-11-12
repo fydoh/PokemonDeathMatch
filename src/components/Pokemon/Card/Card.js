@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Experiment, {
+  When,
+  UpdateFetchExperiment,
+  Debugger
+} from '@carvana/experiment';
 import Tooltip from '@carvana/tooltip';
 import FightResults from './FightResults';
 import { PokemonCard, Check, HistoryIcon, Name } from './Card.styles';
@@ -40,24 +45,35 @@ const Card = ({ update, guy, contenders, fightResults, showBattleHistory }) => {
       <Name>{name}</Name>
       <img src={sprites.front_default} alt={name} />
       {isPokemonSelected && <Check data-testid="checkmark" />}
-      {showBattleHistory && (
-        <History>
-          <Tooltip persist>
-            <Tooltip.HoverElement>
-              <HistoryIcon height={20} width={20} />
-            </Tooltip.HoverElement>
-            <CustomContent arrowPosition="left">
-              {fightResults &&
-                fightResults.filter(x => x.winner === name || x.loser === name)
-                  .length === 0 && <div>No fight results</div>}
-              {fightResults &&
-                fightResults.filter(x => x.winner === name || x.loser === name).length > 0 && (
-                <FightResults name={name} fightResults={fightResults} />
-              )}
-            </CustomContent>
-          </Tooltip>
-        </History>
-      )}
+      <Experiment
+        name="battle-history"
+        environment="development"
+        identifier="meeee"
+        defaultBucket="control"
+      >
+        <When bucket="control">
+          <div />
+        </When>
+        <When bucket="history">
+          <History>
+            <Tooltip persist>
+              <Tooltip.HoverElement>
+                <HistoryIcon height={20} width={20} />
+              </Tooltip.HoverElement>
+              <CustomContent arrowPosition="left">
+                {fightResults &&
+                  fightResults.filter(x => x.winner === name || x.loser === name)
+                    .length === 0 && <div>No fight results</div>}
+                {fightResults &&
+                  fightResults.filter(x => x.winner === name || x.loser === name).length > 0 && (
+                  <FightResults name={name} fightResults={fightResults} />
+                )}
+              </CustomContent>
+            </Tooltip>
+          </History>
+        </When>
+
+      </Experiment>
     </PokemonCard>
   );
 };
